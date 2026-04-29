@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 
 type CareerFormData = {
   personName: string;
@@ -103,6 +103,7 @@ const CareersSection = () => {
         throw new Error('EmailJS environment variables are missing.');
       }
 
+      emailjs.init(publicKey);
 
       // Map form fields to EmailJS template variables for career form
       const templateParams = {
@@ -135,7 +136,7 @@ const CareersSection = () => {
         why_minervaa: formData.whyChooseMinervaa,
       };
 
-      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      await emailjs.send(serviceId, templateId, templateParams);
 
       setSubmitStatus({
         type: 'success',

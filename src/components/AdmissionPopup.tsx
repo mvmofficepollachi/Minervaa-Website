@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 
 type AdmissionFormData = {
   childName: string;
@@ -133,6 +133,8 @@ const AdmissionPopup = () => {
         throw new Error('Missing one or more EmailJS environment values');
       }
 
+      emailjs.init(publicKey);
+
       const allDetails = [
         `Child Name: ${formData.childName || '-'}`,
         `Date of Birth: ${formData.dateOfBirth || '-'}`,
@@ -211,7 +213,7 @@ const AdmissionPopup = () => {
       };
 
       try {
-        await emailjs.send(serviceId, templateId, templateParams, publicKey);
+        await emailjs.send(serviceId, templateId, templateParams);
       } catch (sendError) {
         const fallbackResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
           method: 'POST',
